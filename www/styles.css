@@ -1,0 +1,152 @@
+body{
+    margin: 0;
+    display: grid;
+    justify-content: center;
+    background-color: #C3C3C3;
+    min-height: 100vh;
+}
+
+#main-container {
+    margin-top: 150px;
+    width: 1400px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#main-sidebar {
+    width: 250px;
+    height: 880px;
+    background-color: #FFFFFF;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    display: flex;
+}
+
+#main-content {
+    width: 1150px;
+    height: 880px;
+    background-color: #E7E7E7;
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+    padding: 15px;
+
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    gap: 15px; /* Space between panels */
+}
+
+.plot-panel {
+    background-color: #FFFFFF;
+    border-radius: 15px;
+    display: flex
+}
+
+#plot-distribuition{
+    grid-row: 1 / span 4;
+    grid-column: 1 / span 3;
+}
+
+#plot-metrics{
+    grid-row:  5 / span 2;
+    grid-column: 1 / span 3;
+}
+
+#plot-orperquantile{
+    grid-row: 1 / span 2;
+    grid-column: 4 / span 2;
+}
+
+#plot-prevalenceperquantile{
+    grid-row: 3 / span 2;
+    grid-column: 4 / span 2;
+}
+
+#plot-roc{
+    grid-row: 5 / span 2;
+    grid-column: 4 / span 2;
+}
+
+#plot-topOR{
+    grid-row: 1 / span 2;
+    grid-column: 6 / span 1;
+}
+
+#plot-ttest{
+    grid-row: 3 / span 1;
+    grid-column: 6 / span 1;
+}
+
+#plot-AUROC{
+    grid-row: 4 / span 1;
+    grid-column: 6 / span 1;
+}
+
+#plot-r2{
+    grid-row: 5 / span 1;
+    grid-column: 6 / span 1;
+}
+
+#plot-beta{
+    grid-row: 6 / span 1;
+    grid-column: 6 / span 1;
+}
+
+#logo{
+    display: flex;
+
+    padding: 30px;
+    height: 130px;
+    width: 100%;
+
+    border-bottom: #C3C3C3 1px solid;
+}
+
+#logo-icon{
+    display: inline-flex;
+    height: 130px;
+    width: 30px;
+
+    padding: 10px;
+
+    justify-content: center;
+}
+
+#logo-icon .material-symbols-outlined{
+    font-size: 45px;
+}
+
+#logo-text{
+    display: inline-flex;
+    flex-direction: column;
+    height: 130px;
+    width: 180px;
+
+    padding: 10px;
+}
+
+#logo-text p{
+    margin: 0;
+    width: 100%;
+}
+
+#logo-maintext{
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 22px;
+    width: 100%;
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal; 
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+}
