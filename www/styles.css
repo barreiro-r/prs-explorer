@@ -2,12 +2,13 @@ body{
     margin: 0;
     display: grid;
     justify-content: center;
-    background-color: #C3C3C3;
+    background-color: #3f3f61;
     min-height: 100vh;
 }
 
 #main-container {
     margin-top: 150px;
+    margin-bottom: 150px;
     width: 1400px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -20,31 +21,111 @@ body{
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
     display: flex;
+    flex-direction: column;
 }
+
+#main-sidebar h1 {
+    font-weight: 400;
+    font-size: 16px;
+    color: #C3C3C3;
+    font-style: italic;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+#main-sidebar h1 .material-symbols-outlined {
+    font-size: 14px;
+}
+
+
+#main-sidebar h2 {
+    font-weight: 400;
+    font-size: 12px;
+    color: #6746BB;
+    margin-top: 30px;
+    margin-bottom: 2px;
+    letter-spacing: 1px;
+}
+
+#main-sidebar label {
+    transform: translateX(5px) translateY(15px);
+    background-color: #FFFFFF;
+    padding-left: 5px;
+    padding-right: 5px;
+
+    font-size: 12px;
+    font-weight: 400;
+    color: #5D5D5D;
+}
+
+#main-container .form-group.shiny-input-container  {
+    display: inline-block;
+    margin: 0px;
+    margin-top: -15px;
+}
+
+#main-container .prs-parameters .form-group.shiny-input-container {
+    display: inline-block;
+    width: 40%;
+}
+
+
+#main-container button {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    background-color: #6746BB;
+}
+
 
 #main-content {
     width: 1150px;
     height: 880px;
-    background-color: #E7E7E7;
+    background-color:rgba(255, 255, 255, .75);
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
-    padding: 15px;
+    padding: 10px;
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-template-rows: repeat(6, 1fr);
-    gap: 15px; /* Space between panels */
+    gap: 10px; /* Space between panels */
 }
 
 .plot-panel {
     background-color: #FFFFFF;
     border-radius: 15px;
-    display: flex
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+}
+
+.plot-panel h1 {
+    margin-top: -25px;
+    margin-bottom: 10px;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 25px;
+    padding-bottom: 10px;
+    font-size: 16px;
+    font-weight: 400;
+    color: #c3c3c3;
+    font-style: italic;
+    border-bottom: #C3C3C3 1px solid;
+    
 }
 
 #plot-distribuition{
     grid-row: 1 / span 4;
     grid-column: 1 / span 3;
+}
+
+#plot-distribuition img {
+    grid-row: 1 / span 4;
+    grid-column: 1 / span 3;
+
+    margin-top: 50px;
 }
 
 #plot-metrics{
@@ -136,6 +217,10 @@ body{
     line-height: 22px;
     width: 100%;
 }
+
+#parameters {
+    padding: 20px;
+} 
 
 .material-symbols-outlined {
     font-family: 'Material Symbols Outlined';

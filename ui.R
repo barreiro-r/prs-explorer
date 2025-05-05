@@ -29,11 +29,58 @@ ui <- fluidPage(
         ),
         div(
           id = 'logo-text',
-          tags$p(id = 'logo-maintext', "Poligenic Risk Score"),
-          tags$p(id = 'logo-subtext', "Explorer")
+          tags$p(id = 'logo-maintext', "Polygenic Risk Score"),
+          tags$p(id = 'logo-subtext', "Explorer"),
         )
-      )
-      
+      ),
+      div(
+        id = 'parameters',
+        tags$h1(tags$span(class="material-symbols-outlined", "construction"),'Parameters'),
+        tags$h2("CONTROLS"),
+        numericInput(
+          inputId = 'controls_samples',
+          label ='Samples',
+          min = 0,
+          max = 1000000,
+          value = 10000),
+        div(class = "prs-parameters",
+          numericInput(
+            inputId = 'controls_mean',
+            label ='PRS Mean',
+            min = -100,
+            max = 100,
+            value = 0),
+          numericInput(
+            inputId = 'controls_sd',
+            label ='PRS SD',
+            min = -100,
+            max = 100,
+            value = 1)
+        ),
+        tags$h2("CASES"),
+        numericInput(
+          inputId = 'cases_samples',
+          label ='Samples',
+          min = 0,
+          max = 1000000,
+          value = 10000),
+        div(class = "prs-parameters",
+          numericInput(
+            inputId = 'cases_mean',
+            label ='PRS Mean',
+            min = -100,
+            max = 100,
+            value = 1),
+          numericInput(
+            inputId = 'cases_sd',
+            label ='PRS SD',
+            min = -100,
+            max = 100,
+            value = 1)
+        ),
+        actionButton("update" ,"Update View", icon("refresh"),
+                 class = "btn btn-primary"),
+      ),
     ),
 
     # --- Plot Area  ---
@@ -41,7 +88,9 @@ ui <- fluidPage(
       id = 'main-content',
       div(
         id = 'plot-distribuition',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Data Distribuition'),
+        plotOutput(outputId = "prsHistogram"),
       ),
       div(
         id = 'plot-metrics',
@@ -49,15 +98,21 @@ ui <- fluidPage(
       ),
       div(
         id = 'plot-orperquantile',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Odds Ratio by Quintile'),
+        plotOutput(outputId = "prsOrs"),
       ),
       div(
         id = 'plot-prevalenceperquantile',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Prevalence by Quantile'),
+        plotOutput(outputId = "prsPrevalencebyquantile"),
       ),
       div(
         id = 'plot-roc',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('ROC'),
+        plotOutput(outputId = "prsRoc"),
       ),
       div(
         id = 'plot-topOR',
