@@ -1,10 +1,10 @@
 # Defines the User Interface (UI) for the Shiny application.
 library(shiny)
+library(ggiraph)
 
 # Define the UI using a fluidPage layout
 # fluidPage provides a responsive layout that adjusts to the browser window size.
 ui <- fluidPage(
-
   tags$head(
     includeCSS("www/styles.css"),
     tags$link(
@@ -13,7 +13,6 @@ ui <- fluidPage(
     ),
     tags$title("PRS Explorer")
   ),
-
 
   div(
     id = 'main-container',
@@ -25,7 +24,7 @@ ui <- fluidPage(
         id = 'logo',
         div(
           id = 'logo-icon',
-          tags$span(class="material-symbols-outlined", "explore")
+          tags$span(class = "material-symbols-outlined", "explore")
         ),
         div(
           id = 'logo-text',
@@ -35,51 +34,66 @@ ui <- fluidPage(
       ),
       div(
         id = 'parameters',
-        tags$h1(tags$span(class="material-symbols-outlined", "construction"),'Parameters'),
+        tags$h1(
+          tags$span(class = "material-symbols-outlined", "construction"),
+          'Parameters'
+        ),
         tags$h2("CONTROLS"),
         numericInput(
           inputId = 'controls_samples',
-          label ='Samples',
+          label = 'Samples',
           min = 0,
           max = 1000000,
-          value = 10000),
-        div(class = "prs-parameters",
+          value = 10000
+        ),
+        div(
+          class = "prs-parameters",
           numericInput(
             inputId = 'controls_mean',
-            label ='PRS Mean',
+            label = 'PRS Mean',
             min = -100,
             max = 100,
-            value = 0),
+            value = 0
+          ),
           numericInput(
             inputId = 'controls_sd',
-            label ='PRS SD',
+            label = 'PRS SD',
             min = -100,
             max = 100,
-            value = 1)
+            value = 1
+          )
         ),
         tags$h2("CASES"),
         numericInput(
           inputId = 'cases_samples',
-          label ='Samples',
+          label = 'Samples',
           min = 0,
           max = 1000000,
-          value = 10000),
-        div(class = "prs-parameters",
+          value = 10000
+        ),
+        div(
+          class = "prs-parameters",
           numericInput(
             inputId = 'cases_mean',
-            label ='PRS Mean',
+            label = 'PRS Mean',
             min = -100,
             max = 100,
-            value = 1),
+            value = 1
+          ),
           numericInput(
             inputId = 'cases_sd',
-            label ='PRS SD',
+            label = 'PRS SD',
             min = -100,
             max = 100,
-            value = 1)
+            value = 1
+          )
         ),
-        actionButton("update" ,"Update View", icon("refresh"),
-                 class = "btn btn-primary"),
+        actionButton(
+          "update",
+          "Update View",
+          icon("refresh"),
+          class = "btn btn-primary"
+        ),
       ),
     ),
 
@@ -90,29 +104,34 @@ ui <- fluidPage(
         id = 'plot-distribuition',
         class = 'plot-panel',
         tags$h1('Data Distribuition'),
-        plotOutput(outputId = "prsHistogram"),
+        girafeOutput(outputId = "prsHistogram"),
       ),
       div(
         id = 'plot-metrics',
-        class = 'plot-panel'
+        class = c('plot-panel', 'my-table'),
+        tags$h1('Observed Metrics'),
+        div(
+          class = 'table-container',
+          tagAppendAttributes(tableOutput(outputId = "observedMetrics"),class = "my-custom-table-class", width = "100%")
+        ),
       ),
       div(
         id = 'plot-orperquantile',
         class = 'plot-panel',
         tags$h1('Odds Ratio by Quintile'),
-        plotOutput(outputId = "prsOrs"),
+        girafeOutput(outputId = "prsOrs"),
       ),
       div(
         id = 'plot-prevalenceperquantile',
         class = 'plot-panel',
         tags$h1('Prevalence by Quantile'),
-        plotOutput(outputId = "prsPrevalencebyquantile"),
+        girafeOutput(outputId = "prsPrevalencebyquantile"),
       ),
       div(
         id = 'plot-roc',
         class = 'plot-panel',
         tags$h1('ROC'),
-        plotOutput(outputId = "prsRoc"),
+        girafeOutput(outputId = "prsRoc"),
       ),
       div(
         id = 'plot-topOR',

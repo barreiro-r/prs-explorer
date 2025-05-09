@@ -1,3 +1,4 @@
+library(ggiraph)
 library(shiny)
 library(tidyverse)
 source("R/plotting_functions.R")
@@ -9,29 +10,23 @@ server <- function(input, output) {
     mutate(z_prs = scale(prs))
   })
   
-  output$prsHistogram <- renderPlot({
-    plot_histogram(data_prs())
+  output$prsHistogram <- renderGirafe({
+    girafe(code = print(plot_histogram(data_prs())),  width_svg = 6, height_svg = 5.7)
   })
 
-  output$prsPrevalencebyquantile <- renderPlot({
-    plot_prevalencebyquantile(data_prs())
+  output$prsPrevalencebyquantile <- renderGirafe({
+    girafe(code = print(plot_prevalencebyquantile(data_prs())), width_svg = 4, height_svg = 2.5)
   })
 
-  output$prsRoc <- renderPlot({
-    plot_roc(data_prs())
+  output$prsRoc <- renderGirafe({
+    girafe(ggobj = plot_roc(data_prs()), width_svg = 4, height_svg = 2.5)
   })
 
-  output$prsOrs <- renderPlot({
-    plot_ors(data_prs())
+  output$prsOrs <- renderGirafe({
+    girafe(ggobj = plot_ors(data_prs()), width_svg = 4, height_svg = 2.5)
   })
 
-  # Reactive expression to generate summary text
-  # renderPrint() captures the console output of the expression inside it.
-  # It updates when its reactive dependencies change (none in this simple case,
-  # but it could depend on inputs if needed).
-  output$summary <- renderPrint({
-    x <- faithful$waiting
-    summary(x) # Calculate and print summary statistics of the waiting times
-  }) # End of renderPrint
-
-} # End of server function
+  output$observedMetrics <- renderTable({
+    observed_metrics(data_prs())
+  })
+} 

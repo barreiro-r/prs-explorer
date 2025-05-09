@@ -124,8 +124,6 @@ body{
 #plot-distribuition img {
     grid-row: 1 / span 4;
     grid-column: 1 / span 3;
-
-    margin-top: 50px;
 }
 
 #plot-metrics{
