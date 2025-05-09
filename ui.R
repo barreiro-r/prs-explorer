@@ -139,11 +139,16 @@ ui <- fluidPage(
       ),
       div(
         id = 'plot-ttest',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('t-test'),
+        htmlOutput("ttestPvalue")
       ),
       div(
         id = 'plot-AUROC',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Boxplot'),
+        girafeOutput(outputId = "miniBoxplot"),
+        
       ),
       div(
         id = 'plot-r2',

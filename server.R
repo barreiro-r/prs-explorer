@@ -29,4 +29,21 @@ server <- function(input, output) {
   output$observedMetrics <- renderTable({
     observed_metrics(data_prs())
   })
+
+  output$ttestPvalue <- renderText({
+    pvalue <- calc_t_test_pvalue(data_prs())
+
+    color_p_value <-
+      if_else(pvalue < 0.01, "#53AD63", "#DB615D")
+
+    str_c(
+      "p-value<br><span style='color:",color_p_value,"; font-size:18pt' >",
+      format(round(pvalue, 7), nsmall = 7),
+      '</span>'
+    )
+  })
+
+  output$miniBoxplot <- renderGirafe({
+    girafe(ggobj = mini_boxplot(data_prs()), width_svg = 4, height_svg = 1.7 )
+  })
 } 

@@ -72,10 +72,10 @@ plot_histogram <- function(data_prs) {
   data_prs |>
     ggplot(aes(x = z_prs)) +
     geom_histogram(
-      aes(fill = group),
+      aes(color = group, fill = group),
       position = 'identity',
       alpha = .5,
-      bins = 100
+      bins = 50
     ) +
     annotate(
       geom = 'segment',
@@ -118,6 +118,7 @@ plot_histogram <- function(data_prs) {
     ) +
     scale_y_continuous(expand = c(00, 0, 0, 0), ) +
     scale_fill_manual(values = palette) +
+    scale_color_manual(values = palette) +
     guides(
       fill = 'none'
     ) +
@@ -348,4 +349,26 @@ observed_metrics <- function(data_prs){
     ) |>
     mutate(group = str_to_title(group)) |>
     rename(Group = 'group')
+}
+
+calc_t_test_pvalue <- function(data_prs) {
+  t_result <-
+    t.test(
+      data_prs |> filter(group == 'case') |> pull(z_prs),
+      data_prs |> filter(group == 'control') |> pull(z_prs)
+    )
+
+  # format(round(t_result$p.value, 2), nsmall = 2)
+  t_result$p.value
+}
+
+
+mini_boxplot <- function(data_prs){
+  data_prs |>
+    ggplot(aes(x = z_prs, y = group)) +
+    geom_boxplot(aes(color = group, fill = group), alpha = .3, outlier.shape = NA) +
+    theme_void() +
+    guides(color = 'none', fill = 'none') +
+    scale_fill_manual(values = palette) +
+    scale_color_manual(values = palette) 
 }
