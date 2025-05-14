@@ -28,7 +28,7 @@ server <- function(input, output) {
 
   output$observedMetrics <- renderTable({
     observed_metrics(data_prs())
-  })
+  }, width = '100%')
 
   output$ttestPvalue <- renderText({
     pvalue <- calc_t_test_pvalue(data_prs())
@@ -46,4 +46,28 @@ server <- function(input, output) {
   output$miniBoxplot <- renderGirafe({
     girafe(ggobj = mini_boxplot(data_prs()), width_svg = 4, height_svg = 1.7 )
   })
-} 
+
+  output$tableOr <- renderTable({
+    table_ors(data_prs())
+  }, width = '100%')
+
+  output$nagelkerkeR <- renderText({
+    r2 <- nagelkerke_r2(data_prs())
+  
+    str_c(
+      "R2<br><span style='font-size:18pt'>",
+      format(round(r2, 7), nsmall = 7),
+      '</span>'
+    )
+  })
+
+  output$orPerSd <- renderText({
+    or_per_sd <- or_per_sd(data_prs())
+    str_c(
+      "OR/SD (scaled)<br><span style='font-size:18pt'>",
+      format(round(or_per_sd, 7), nsmall = 7),
+      '</span>'
+    )
+  })
+}
+

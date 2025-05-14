@@ -3,6 +3,7 @@ library(ggtext)
 library(scales)
 library(pROC)
 library(ggiraph)
+library(performance)
 
 data_prs <- bind_rows(
   tibble(prs = rnorm(10000, 0, 1), group = 'control'),
@@ -120,7 +121,8 @@ plot_histogram <- function(data_prs) {
     scale_fill_manual(values = palette) +
     scale_color_manual(values = palette) +
     guides(
-      fill = 'none'
+      fill = 'none',
+      color = 'none'
     ) +
     labs(
       x = 'PRS',
@@ -310,7 +312,7 @@ plot_ors <- function(data_prs) {
     ) |>
     arrange(prs_quintile) |>
     select(prs_quintile, OR, lower_ci, upper_ci) |>
-    mutate(OR = log(OR), lower_ci = log(lower_ci), upper_ci = log(upper_ci))
+    mutate(OR = log10(OR), lower_ci = log10(lower_ci), upper_ci = log10(upper_ci))
 
   final_summary <- left_join(counts_table, or_results, by = "prs_quintile")
 
@@ -366,9 +368,97 @@ calc_t_test_pvalue <- function(data_prs) {
 mini_boxplot <- function(data_prs){
   data_prs |>
     ggplot(aes(x = z_prs, y = group)) +
-    geom_boxplot(aes(color = group, fill = group), alpha = .3, outlier.shape = NA) +
+    geom_boxplot(aes(color = group, fill = group), alpha = .3, outlier.shape = NA, linewidth = 1.5) +
     theme_void() +
     guides(color = 'none', fill = 'none') +
     scale_fill_manual(values = palette) +
     scale_color_manual(values = palette) 
+}
+
+
+table_ors <- function(data_prs) {
+  data2plot <- data_prs
+
+  ref_risk <- data2plot |>
+    filter(
+      z_prs > quantile(data2plot$z_prs, 0.4),
+      z_prs < quantile(data2plot$z_prs, 0.6)
+    ) |> 
+    mutate(labels = '40-60%')
+
+  thresholds <- c(0.80, 0.90, 0.95, 0.99)
+  top_risk <- map_dfr(
+    thresholds,
+    ~ data2plot |>
+        filter(z_prs > quantile(z_prs, .x, na.rm = TRUE)) |>
+        mutate(labels = str_c(">",.x * 100,"%"))
+  )
+
+  data2plot <- bind_rows(ref_risk,top_risk)
+
+  counts_table <- data2plot |>
+    filter(!is.na(labels)) |>
+    count(labels, group, name = "count") |>
+    pivot_wider(names_from = group, values_from = count, values_fill = 0) |>
+    select(labels, case, control) |>
+    arrange(labels)
+
+  regression_data <- data2plot |>
+    filter(!is.na(labels)) |> # Ensure no NA quintiles
+    mutate(
+      outcome = ifelse(group == "case", 1, 0),
+      labels_factor = factor(
+        labels,
+        levels = c("40-60%", ">80%", ">90%", ">95%", ">99%")
+      )
+    )
+
+  model <- glm(
+    outcome ~ labels_factor,
+    data = regression_data,
+    family = binomial(link = "logit")
+  )
+
+  or_ci <- exp(cbind(OR = coef(model), confint(model)))
+
+  or_results <- as_tibble(or_ci, rownames = "term") |>
+    rename(lower_ci = `2.5 %`, upper_ci = `97.5 %`) |>
+    mutate(term = gsub("labels_factor", "", term)) |>
+    filter(term != "(Intercept)") |>
+    add_row(term = "40-60%", OR = 1.00, lower_ci = 1, upper_ci = 1) |>
+    mutate(
+      labels = factor(
+        term,
+        levels = c("40-60%", ">80%", ">90%", ">95%", ">99%")
+      )
+    ) |>
+    arrange(labels) |>
+    select(labels, OR, lower_ci, upper_ci) |>
+    mutate(OR = log10(OR), lower_ci = log10(lower_ci), upper_ci = log10(upper_ci))
+
+  final_summary <- 
+    left_join(counts_table, or_results, by = "labels") |>
+    filter(labels != '40-60%') |>
+    mutate(label_text = str_c(round(OR,2), '\n(',round(lower_ci,2),'-',round(upper_ci,2),')')) |>
+      select(-case, -control, -OR, -lower_ci, -upper_ci) |>
+    rename(Group = 'labels', "LOR (95%CI)" = 'label_text') |>
+    arrange(desc(Group))
+}
+
+
+nagelkerke_r2 <- function(data_prs) {
+  data2plot <- data_prs |>
+    mutate(group = if_else(group == 'control',0,1))
+
+  my_model <- glm(group ~ z_prs, data = data2plot, family = binomial)
+  nagelkerke_r2 <- r2_nagelkerke(my_model)
+  nagelkerke_r2
+}
+
+or_per_sd <- function(data_prs) {
+  data2plot <- data_prs |>
+    mutate(group = if_else(group == 'control',0,1))
+
+  my_model <- glm(group ~ z_prs, data = data2plot, family = binomial)
+  or_per_sd <- exp(coef(my_model)["z_prs"])
 }

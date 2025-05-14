@@ -4,6 +4,9 @@ body{
     justify-content: center;
     background-color: #3f3f61;
     min-height: 100vh;
+
+    background-image: radial-gradient(circle at center,rgba(148, 116, 252, 0.4) 0.5px, transparent 1px);
+    background-size: 10px 10px;
 }
 
 #main-container {
@@ -12,6 +15,8 @@ body{
     width: 1400px;
     display: grid;
     grid-template-columns: 1fr 1fr;
+
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 #main-sidebar {
@@ -82,10 +87,16 @@ body{
 #main-content {
     width: 1150px;
     height: 880px;
-    background-color:rgba(255, 255, 255, .75);
+    /* background-color:rgba(255, 255, 255, .75); */
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
     padding: 10px;
+
+    background-color: rgba(255, 255, 255, 0.10); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* The blur effect! */
+    -webkit-backdrop-filter: blur(10px); /* For Safari compatibility */
+    border: 1px solid rgba(255, 255, 255, 0.10); /* Optional: subtle border */
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1); 
 
     display: grid;
     grid-template-columns: repeat(6, 1fr);
@@ -232,4 +243,16 @@ body{
     white-space: nowrap;
     word-wrap: normal;
     direction: ltr;
+}
+
+
+.table.shiny-table>thead>tr>th, .table.shiny-table>thead>tr>td, .table.shiny-table>tbody>tr>th, .table.shiny-table>tbody>tr>td, .table.shiny-table>tfoot>tr>th, .table.shiny-table>tfoot>tr>td {
+    font-size: 12px;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.shiny-table.spacing-s>thead>tr>th, .shiny-table.spacing-s>thead>tr>td, .shiny-table.spacing-s>tbody>tr>th, .shiny-table.spacing-s>tbody>tr>td, .shiny-table.spacing-s>tfoot>tr>th, .shiny-table.spacing-s>tfoot>tr>td {
+    padding-top: 10px;
+    padding-bottom: 10px;
 }

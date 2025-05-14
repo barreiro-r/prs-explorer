@@ -88,12 +88,12 @@ ui <- fluidPage(
             value = 1
           )
         ),
-        actionButton(
-          "update",
-          "Update View",
-          icon("refresh"),
-          class = "btn btn-primary"
-        ),
+        # actionButton(
+        #   "update",
+        #   "Update View",
+        #   icon("refresh"),
+        #   class = "btn btn-primary"
+        # ),
       ),
     ),
 
@@ -112,7 +112,7 @@ ui <- fluidPage(
         tags$h1('Observed Metrics'),
         div(
           class = 'table-container',
-          tagAppendAttributes(tableOutput(outputId = "observedMetrics"),class = "my-custom-table-class", width = "100%")
+          tableOutput(outputId = "observedMetrics")
         ),
       ),
       div(
@@ -131,11 +131,13 @@ ui <- fluidPage(
         id = 'plot-roc',
         class = 'plot-panel',
         tags$h1('ROC'),
-        girafeOutput(outputId = "prsRoc"),
+        girafeOutput(outputId = "prsRoc")
       ),
       div(
         id = 'plot-topOR',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Top OR'),
+        tableOutput(outputId = "tableOr")
       ),
       div(
         id = 'plot-ttest',
@@ -152,11 +154,15 @@ ui <- fluidPage(
       ),
       div(
         id = 'plot-r2',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('Nagelkerke R2'),
+        htmlOutput("nagelkerkeR")
       ),
       div(
         id = 'plot-beta',
-        class = 'plot-panel'
+        class = 'plot-panel',
+        tags$h1('OR per SD'),
+        htmlOutput("orPerSd")
       )
     )
   )
