@@ -1,0 +1,10 @@
+name: prs-explorer
+title:
+username: barreiro-r
+account: barreiro-r
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 14761544
+bundleId: 10288824
+url: https://barreiro-r.shinyapps.io/prs-explorer/
+version: 1
