@@ -2,9 +2,11 @@ library(tidyverse)
 library(ggtext)
 library(scales)
 library(pROC)
-library(ggiraph)
+# library(ggiraph)
 library(performance)
-library(grid)
+# library(grid)
+# library(magick)
+# library(ggpattern)
 
 data_prs <- bind_rows(
   tibble(prs = rnorm(10000, 0, 1), group = 'control'),
@@ -26,7 +28,6 @@ theme_set(
       plot.background = element_blank(),
       plot.title.position = "plot",
       plot.title = element_text(
-        family = "Helvetica Neue",
         size = 12,
         face = 'bold',
         hjust = .5
@@ -43,65 +44,61 @@ theme_set(
         hjust = .5
       ),
       axis.title.x = element_markdown(
-        family = "Helvetica Neue",
         hjust = .5,
         size = 12,
         color = "grey40"
       ),
       axis.title.y = element_markdown(
-        family = "Helvetica Neue",
         hjust = .5,
         size = 12,
         color = "grey40"
       ),
       axis.text = element_text(
-        family = "Helvetica Neue",
         hjust = .5,
         size = 12,
         color = "grey40"
       ),
-      legend.position = "top",
-      text = element_text(family = "Helvetica Neue")
+      legend.position = "top"
     )
 )
 
 palette <- c("control" = "#C3C3C3", "case" = "#6746BB")
 
-create_angled_gradient <- function(colors, angle_deg) {
+# create_angled_gradient <- function(colors, angle_deg) {
 
-  # Convert angle from degrees to radians
-  # Standard convention: 0 deg = right (+x), 90 deg = up (+y)
-  angle_rad <- angle_deg * pi / 180
+#   # Convert angle from degrees to radians
+#   # Standard convention: 0 deg = right (+x), 90 deg = up (+y)
+#   angle_rad <- angle_deg * pi / 180
 
-  # Calculate the components of the direction vector (unit vector)
-  dx <- cos(angle_rad)
-  dy <- sin(angle_rad)
+#   # Calculate the components of the direction vector (unit vector)
+#   dx <- cos(angle_rad)
+#   dy <- sin(angle_rad)
 
-  # Calculate start and end points centered around (0.5, 0.5) NPC
-  # The vector goes from (0.5 - 0.5*direction) to (0.5 + 0.5*direction)
-  # This ensures the gradient line defined by the start/end points passes
-  # through the center of the NPC space (0.5, 0.5) with the correct angle.
-  # Scaling by 0.5 ensures the endpoints are typically within or near the
-  # 0-1 range for common angles, effectively defining the gradient across the space.
-  x1 <- 0.5 - 0.5 * dx
-  y1 <- 0.5 - 0.5 * dy
-  x2 <- 0.5 + 0.5 * dx
-  y2 <- 0.5 + 0.5 * dy
+#   # Calculate start and end points centered around (0.5, 0.5) NPC
+#   # The vector goes from (0.5 - 0.5*direction) to (0.5 + 0.5*direction)
+#   # This ensures the gradient line defined by the start/end points passes
+#   # through the center of the NPC space (0.5, 0.5) with the correct angle.
+#   # Scaling by 0.5 ensures the endpoints are typically within or near the
+#   # 0-1 range for common angles, effectively defining the gradient across the space.
+#   x1 <- 0.5 - 0.5 * dx
+#   y1 <- 0.5 - 0.5 * dy
+#   x2 <- 0.5 + 0.5 * dx
+#   y2 <- 0.5 + 0.5 * dy
 
-  # Create the linear gradient object using NPC units
-  linearGradient(
-    colours = colors,
-    x1 = unit(x1, "npc"),
-    y1 = unit(y1, "npc"),
-    x2 = unit(x2, "npc"),
-    y2 = unit(y2, "npc")
-  )
-}
+#   # Create the linear gradient object using NPC units
+#   linearGradient(
+#     colours = colors,
+#     x1 = unit(x1, "npc"),
+#     y1 = unit(y1, "npc"),
+#     x2 = unit(x2, "npc"),
+#     y2 = unit(y2, "npc")
+#   )
+# }
 
 plot_histogram <- function(data_prs) {
 
-  grad_control <- create_angled_gradient(c('white','#C3C3C3'), 90)
-  grad_case <- create_angled_gradient(c('white','#6746BB'), 90)
+  # grad_control <- create_angled_gradient(c('white','#C3C3C3'), 90)
+  # grad_case <- create_angled_gradient(c('white','#6746BB'), 90)
 
   quantile9 <- quantile(data_prs$z_prs, probs = 0.9)
   quantile1 <- quantile(data_prs$z_prs, probs = 0.1)
@@ -114,11 +111,30 @@ plot_histogram <- function(data_prs) {
     #   bins = 50
     # ) +
     geom_density(
-      data = subset(data_prs, group == 'control'),
-      aes(color = group, y = after_stat(count)), fill = grad_control, alpha = 0.55) +
-    geom_density(
-      data = subset(data_prs, group == 'case'),
-      aes(color = group, y = after_stat(count)), fill = grad_case, alpha = 0.55) +
+        aes(
+          color = group, y = after_stat(count), fill = group
+        ),
+        alpha = 0.55) +
+    # geom_density_pattern(
+    #   data = subset(data_prs, group == 'control'),
+    #   aes(
+    #     color = group, y = after_stat(count)
+    #   ),
+    #   pattern_fill  = I('white'),
+    #   pattern_fill2 = I('#C3C3C3'),
+    #   pattern_orientation = I('vertical'),
+    #   pattern         = 'gradient',
+    #   alpha = 0.55) +
+    # geom_density_pattern(
+    #   data = subset(data_prs, group == 'case'),
+    #   aes(
+    #     color = group, y = after_stat(count)
+    #   ),
+    #   pattern_fill  = I('white'),
+    #   pattern_fill2 = I('#6746BB'),
+    #   pattern_orientation = I('vertical'),
+    #   pattern         = 'gradient',
+    #   alpha = 0.55) +
     annotate(
       geom = 'segment',
       x = quantile1,
@@ -132,13 +148,12 @@ plot_histogram <- function(data_prs) {
       geom = 'richtext',
       x = quantile1 + quantile1 * .1,
       y = Inf,
-      label = '←<br>**Low-Risk**<br><10% of the samples',
+      label = "<span style='font-size:18pt'>←</span><br>**Low-Risk**<br><10% of the samples",
       vjust = 1,
       hjust = 1,
       fill = NA,
       label.color = NA
     ) +
-
     annotate(
       geom = 'segment',
       x = quantile9,
@@ -152,7 +167,7 @@ plot_histogram <- function(data_prs) {
       geom = 'richtext',
       x = quantile9 + quantile9 * .1,
       y = Inf,
-      label = '→<br>**High-Risk**<br>>90% of the samples',
+      label = "<span style='font-size:18pt'>→</span><br>**High-Risk**<br>>90% of the samples",
       vjust = 1,
       hjust = 0,
       fill = NA,
@@ -257,7 +272,7 @@ plot_roc <- function(data_prs) {
   # Warning in roc.default(response, predictor, auc = TRUE, ...) :
   # Deprecated use a matrix as predictor. Unexpected results may be produced, please pass a numeric vector.
 
-  grad_case <- create_angled_gradient(c('white','#6746BB'), 120)
+  # grad_case <- create_angled_gradient(c('white','#6746BB'), 120)
 
   data_prs <- data_prs |> mutate(group = if_else(group == 'case', 1, 0))
 
@@ -266,7 +281,7 @@ plot_roc <- function(data_prs) {
 
   ggroc(roc_obj, color = palette['case']) +
     geom_ribbon(
-      fill = grad_case,
+      fill = "#6746BB",
       aes(x = specificity, ymin = -Inf, ymax = sensitivity),
       alpha = .3
     ) +
