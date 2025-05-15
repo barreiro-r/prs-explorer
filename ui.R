@@ -117,7 +117,8 @@ ui <- fluidPage(
         id = 'plot-distribuition',
         class = 'plot-panel',
         tags$h1('Data Distribuition'),
-        girafeOutput(outputId = "prsHistogram"),
+        # girafeOutput(outputId = "prsHistogram"),
+        plotOutput(outputId = "prsHistogram",  , width='500px', height= '750px')
       ),
       div(
         id = 'plot-metrics',
@@ -130,19 +131,22 @@ ui <- fluidPage(
         id = 'plot-orperquantile',
         class = 'plot-panel',
         tags$h1('Odds Ratio by Quintile'),
-        girafeOutput(outputId = "prsOrs"),
+        # girafeOutput(outputId = "prsOrs"),
+        plotOutput(outputId = "prsOrs", width='340px', height= '250px'),
       ),
       div(
         id = 'plot-prevalenceperquantile',
         class = 'plot-panel',
         tags$h1('Prevalence by Quantile'),
-        girafeOutput(outputId = "prsPrevalencebyquantile"),
+        # girafeOutput(outputId = "prsPrevalencebyquantile"),
+        plotOutput(outputId = "prsPrevalencebyquantile", width='340px', height= '250px'),
       ),
       div(
         id = 'plot-roc',
         class = 'plot-panel',
         tags$h1('ROC'),
-        girafeOutput(outputId = "prsRoc")
+        # girafeOutput(outputId = "prsRoc")
+        plotOutput(outputId = "prsRoc", width='340px', height= '250px'),
       ),
       div(
         id = 'plot-topOR',
@@ -163,7 +167,8 @@ ui <- fluidPage(
         id = 'plot-AUROC',
         class = 'plot-panel',
         tags$h1('Boxplot'),
-        girafeOutput(outputId = "miniBoxplot"),
+        # girafeOutput(outputId = "miniBoxplot"),
+        plotOutput(outputId = "miniBoxplot", width='150px', height= '70px')
       ),
       div(
         id = 'plot-r2',

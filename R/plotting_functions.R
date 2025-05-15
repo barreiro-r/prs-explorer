@@ -411,7 +411,7 @@ calc_t_test_pvalue <- function(data_prs) {
 mini_boxplot <- function(data_prs){
   data_prs |>
     ggplot(aes(x = z_prs, y = group)) +
-    geom_boxplot(aes(color = group, fill = group), alpha = .3, outlier.shape = NA, linewidth = 1.5) +
+    geom_boxplot(aes(color = group, fill = group), alpha = .3, outlier.shape = NA, linewidth = 1) +
     theme_void() +
     guides(color = 'none', fill = 'none') +
     scale_fill_manual(values = palette) +

@@ -10,20 +10,36 @@ server <- function(input, output) {
     mutate(z_prs = scale(prs))
   })
   
-  output$prsHistogram <- renderGirafe({
-    girafe(code = print(plot_histogram(data_prs())),  width_svg = 6, height_svg = 5.7)
+  # output$prsHistogram <- renderGirafe({
+  #   girafe(code = print(plot_histogram(data_prs())),  width_svg = 6, height_svg = 5.7)
+  # })
+
+  output$prsHistogram <- renderPlot({
+    plot_histogram(data_prs())
   })
 
-  output$prsPrevalencebyquantile <- renderGirafe({
-    girafe(code = print(plot_prevalencebyquantile(data_prs())), width_svg = 4, height_svg = 2.5)
+  # output$prsPrevalencebyquantile <- renderGirafe({
+  #   girafe(code = print(plot_prevalencebyquantile(data_prs())), width_svg = 4, height_svg = 2.5)
+  # })
+
+  output$prsPrevalencebyquantile <- renderPlot({
+    plot_prevalencebyquantile(data_prs())
   })
 
-  output$prsRoc <- renderGirafe({
-    girafe(ggobj = plot_roc(data_prs()), width_svg = 4, height_svg = 2.5)
+  # output$prsRoc <- renderGirafe({
+  #   girafe(ggobj = plot_roc(data_prs()), width_svg = 4, height_svg = 2.5)
+  # })
+
+  output$prsRoc <- renderPlot({
+    plot_roc(data_prs())
   })
 
-  output$prsOrs <- renderGirafe({
-    girafe(ggobj = plot_ors(data_prs()), width_svg = 4, height_svg = 2.5)
+  # output$prsOrs <- renderGirafe({
+  #   girafe(ggobj = plot_ors(data_prs()), width_svg = 4, height_svg = 2.5)
+  # })
+
+  output$prsOrs <- renderPlot({
+    plot_ors(data_prs())
   })
 
   output$observedMetrics <- renderUI({
@@ -86,8 +102,12 @@ server <- function(input, output) {
     )
   })
 
-  output$miniBoxplot <- renderGirafe({
-    girafe(ggobj = mini_boxplot(data_prs()), width_svg = 4, height_svg = 1.7 )
+  # output$miniBoxplot <- renderGirafe({
+  #   girafe(ggobj = mini_boxplot(data_prs()), width_svg = 4, height_svg = 1.7 )
+  # })
+
+  output$miniBoxplot <- renderPlot({
+    mini_boxplot(data_prs())
   })
 
   output$tableOr <- renderTable({
