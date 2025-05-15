@@ -1,7 +1,5 @@
 body{
     margin: 0;
-    display: grid;
-    justify-content: center;
     background-color: #3f3f61;
     min-height: 100vh;
 
@@ -10,6 +8,9 @@ body{
 }
 
 #main-container {
+    margin-left: auto; /* Add for test */
+    margin-right: auto; /* Add for test */
+
     margin-top: 150px;
     margin-bottom: 150px;
     width: 1400px;
