@@ -1,2 +1,1 @@
-# prs-explorer
-PRS Explorer is a tool for study Poligenic Risk Score through simulated data.
+satic version because liveshiny don't like it
