@@ -12,6 +12,10 @@ ui <- fluidPage(
       rel = "stylesheet",
       href = "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
     ),
+    tags$link(
+      rel = "stylesheet",
+      href = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    ),
     tags$title("PRS Explorer")
   ),
 
@@ -222,7 +226,14 @@ ui <- fluidPage(
       # Navigation Arrows
       tags$a(class = "prev nav-arrow", tags$span(class = "material-symbols-outlined", "arrow_back_ios")),
       tags$a(class = "next nav-arrow", tags$span(class = "material-symbols-outlined", "arrow_forward_ios"))
-    )
+    ),
+
+    
   ),
+  div(class = 'footer',
+
+    HTML('<i class="fab fa-github"></i>'),
+    tags$a(href = "https://github.com/barreiro-r/prs-explorer", "barreiro-r")
+    ),
   tags$script(src = "script.js")
 ) # End of fluidPage
