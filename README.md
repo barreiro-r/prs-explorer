@@ -1,9 +1,7 @@
 # Polygenic Risk Score Explorer
 
-> LINKS
-
-[![Launch PRS Dashboard](https://img.shields.io/badge/R%20Shiny-PRS%20explorer-6746BB?style=for-the-badge&logo=r&logoColor=white)](https://barreiro-r.github.io/prs-explorer/)
-[![Launch PRS Dashboard](https://img.shields.io/badge/Serveless-PRS%20explorer-6746BB?style=for-the-badge&logo=serverless&logoColor=white)](https://barreiro-r.shinyapps.io/prs-explorer/)
+[![Launch PRS Dashboard](https://img.shields.io/badge/R%20Shiny-PRS%20explorer-6746BB?style=for-the-badge&logo=r&logoColor=white)](https://barreiro-r.shinyapps.io/prs-explorer/)
+[![Launch PRS Dashboard](https://img.shields.io/badge/Serveless-PRS%20explorer-6746BB?style=for-the-badge&logo=serverless&logoColor=white)](https://barreiro-r.github.io/prs-explorer/)
 
 > [!NOTE]  
 > R Shiny (shynyapps.io) has a limitation of parallel users and users by month. Serveless version may take a while do load. No mobile-friendly version available (sadly).
