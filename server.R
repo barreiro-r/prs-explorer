@@ -26,9 +26,52 @@ server <- function(input, output) {
     girafe(ggobj = plot_ors(data_prs()), width_svg = 4, height_svg = 2.5)
   })
 
-  output$observedMetrics <- renderTable({
-    observed_metrics(data_prs())
-  }, width = '100%')
+  output$observedMetrics <- renderUI({
+    obs_metrics <- observed_metrics(data_prs())
+
+    div(
+      class = 'table_cell',
+      tagAppendAttributes(class = 'table shiny-table table- spacing-s',tags$table(
+        tags$thead(
+          tags$tr(
+            tagAppendAttributes(rowspan = "2", tags$th("Group")),
+            tagAppendAttributes(
+              colspan = "2",
+              class = "text-center",
+              tags$th("Observable")
+            ),
+            tagAppendAttributes(
+              colspan = "2",
+              class = "text-center",
+              tags$th("Scaled (Z)")
+            )
+          ),
+          tags$tr(
+            tags$th("Mean"),
+            tags$th("SD"),
+            tags$th("Mean"),
+            tags$th("SD"),
+          )
+        ),
+        tags$tbody(
+          tags$tr(
+            tags$td("Case"),
+            tags$td(obs_metrics |> filter(Group == 'Case') |> pull(`Obs Mean`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Case') |> pull(`Obs SD`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Case') |> pull(`Z-score Mean`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Case') |> pull(`Z-score SD`) |> round(digits = 2))
+          ),
+          tags$tr(
+            tags$td("Control"),
+            tags$td(obs_metrics |> filter(Group == 'Control') |> pull(`Obs Mean`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Control') |> pull(`Obs SD`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Control') |> pull(`Z-score Mean`) |> round(digits = 2)),
+            tags$td(obs_metrics |> filter(Group == 'Control') |> pull(`Z-score SD`) |> round(digits = 2))
+          )
+        )
+      )
+    ))
+  })
 
   output$ttestPvalue <- renderText({
     pvalue <- calc_t_test_pvalue(data_prs())
@@ -49,7 +92,7 @@ server <- function(input, output) {
 
   output$tableOr <- renderTable({
     table_ors(data_prs())
-  }, width = '100%')
+  }, width = '100%', sanitize.text.function = function(x) x)
 
   output$nagelkerkeR <- renderText({
     r2 <- nagelkerke_r2(data_prs())

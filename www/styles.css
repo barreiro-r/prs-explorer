@@ -80,7 +80,10 @@ body{
     margin-bottom: 10px;
     padding: 10px;
     width: 100%;
-    background-color: #6746BB;
+}
+#main-container .material-symbols-outlined {
+    font-size: 14px;
+    transform: translateY(1px);
 }
 
 
@@ -193,11 +196,10 @@ body{
 }
 
 #logo-icon{
+    margin-top: -8px;
     display: inline-flex;
     height: 130px;
     width: 30px;
-
-    padding: 10px;
 
     justify-content: center;
 }
@@ -246,13 +248,215 @@ body{
 }
 
 
-.table.shiny-table>thead>tr>th, .table.shiny-table>thead>tr>td, .table.shiny-table>tbody>tr>th, .table.shiny-table>tbody>tr>td, .table.shiny-table>tfoot>tr>th, .table.shiny-table>tfoot>tr>td {
+.table.shiny-table>thead>tr>th,
+.table.shiny-table>thead>tr>td,
+.table.shiny-table>tbody>tr>th,
+.table.shiny-table>tbody>tr>td,
+.table.shiny-table>tfoot>tr>th,
+.table.shiny-table>tfoot>tr>td {
     font-size: 12px;
-    padding-right: 0;
-    padding-left: 0;
-}
-
-.shiny-table.spacing-s>thead>tr>th, .shiny-table.spacing-s>thead>tr>td, .shiny-table.spacing-s>tbody>tr>th, .shiny-table.spacing-s>tbody>tr>td, .shiny-table.spacing-s>tfoot>tr>th, .shiny-table.spacing-s>tfoot>tr>td {
+    padding-right: 15px;
+    padding-left: 15px;
     padding-top: 10px;
     padding-bottom: 10px;
+
+    vertical-align: middle;
+}
+
+.table.shiny-table>tbody>tr:hover {
+    background-color: #f3f4f6
+}
+
+.shiny-table.spacing-s>thead>tr>th{
+    text-transform: uppercase;
+    color: #6b7280; /* Equivalent to text-gray-500 */
+    letter-spacing: 0.05em; /* Equivalent to tracking-wider */
+    font-size: 10px;
+}
+
+.shiny-table.spacing-s>thead {
+    background-color: #f3f4f6; /* Equivalent to bg-gray-100 */
+}
+
+.table_cell{
+    padding-top: 10px;
+    margin: -15px;
+}
+
+.table {
+    margin-top: -5px;
+}
+
+#plot-topOR .shiny-table.spacing-s>thead>tr>th,
+#plot-topOR .shiny-table.spacing-s>thead>tr>td,
+#plot-topOR .shiny-table.spacing-s>tbody>tr>th,
+#plot-topOR .shiny-table.spacing-s>tbody>tr>td,
+#plot-topOR .shiny-table.spacing-s>tfoot>tr>th,
+#plot-topOR .shiny-table.spacing-s>tfoot>tr>td  {    
+    padding-top: 8px;
+    padding-bottom: 8px;
+    line-height:13px;
+}
+
+
+/* Slide Show */
+.open-slideshow-button {
+    background-color: #3b82f6; /* Equivalent to bg-blue-500 */
+    color: white;
+    font-weight: bold;
+    padding: 0.75rem 1.5rem; /* Equivalent to py-3 px-6 */
+    border-radius: 0.5rem; /* Equivalent to rounded-lg */
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* Equivalent to shadow-md */
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.open-slideshow-button:hover {
+    background-color: #1d4ed8; /* Equivalent to hover:bg-blue-700 */
+    transform: scale(1.05);
+}
+
+/* Modal Backdrop */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 40;
+    display: none; /* Hidden by default */
+}
+
+/* Modal Container */
+.modal-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
+    display: none; /* Hidden by default */
+    width: 90%;
+    width: 800px;
+    height: 600px;
+    overflow-y: auto;
+    background-color: #ffffff; /* Equivalent to bg-white */
+    border-radius: 0.75rem; /* Equivalent to rounded-xl */
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); /* Equivalent to shadow-2xl */
+    padding: 6rem;
+}
+@media (min-width: 768px) { /* md breakpoint */
+    .modal-container {
+        padding: 6rem; /* Equivalent to md:p-8 */
+    }
+}
+
+
+/* Close Button for Modal */
+#openModalButton {
+    background-color: white;
+    color: #a1a1a1;
+    border: 1px solid #c3c3c3;
+    font-weight: normal;
+    text-align: left;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 1rem; /* Equivalent to top-4 */
+    right: 1rem; /* Equivalent to right-4 */
+    color: #4b5563; /* Equivalent to text-gray-600 */
+    font-size: 1.875rem; /* Equivalent to text-3xl */
+    font-weight: bold;
+    z-index: 10; /* Ensure it's above slideshow content if overlapping */
+    background: none;
+    border: none;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.modal-close-button:hover {
+    color: #111827; /* Equivalent to hover:text-gray-900 */
+}
+
+/* Slideshow Content Area */
+.slideshow-content {
+    position: relative; /* For positioning arrows */
+}
+
+/* Individual Slide Item */
+.slide-item {
+    display: none; /* Hide all slides by default */
+    animation: fadeEffect 0.8s; /* Animation for fade in/out */
+}
+
+.slide-item.active {
+    display: block; /* Show active slide */
+}
+
+@keyframes fadeEffect {
+    from {opacity: 0.4}
+    to {opacity: 1}
+}
+
+.slide-title {
+    font-size: 2.5rem; /* Equivalent to text-3xl */
+    font-weight: bold;
+    color: #1f2937; /* Equivalent to text-gray-800 */
+    margin-bottom: 1rem; /* Equivalent to mb-4 */
+    padding-top: 0px;
+}
+ @media (min-width: 768px) { /* md breakpoint */
+    .slide-title {
+        font-size: 2.5rem; /* Equivalent to md:text-4xl */
+    }
+}
+
+
+.slide-text {
+    color: #4b5563; /* Equivalent to text-gray-600 */
+    margin-bottom: 1.5rem; /* Equivalent to mb-6 */
+    font-size: 1.5rem; /* Equivalent to text-lg */
+    line-height: 1.6;
+}
+
+.slide-image {
+    width: 100%;
+    height: auto;
+    max-height: 50vh; /* Keep image height constrained */
+    object-fit: contain; /* Scale image to fit while maintaining aspect ratio */
+    border-radius: 0.5rem; /* Equivalent to rounded-lg */
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* Styling for navigation arrows */
+.nav-arrow {
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    /* transform: translateY(-50%); */
+    padding: 16px;
+    color: #c3c3c3;
+    font-size: 24px;
+    transition: background-color 0.3s ease;
+    user-select: none;
+    border-radius: 0 3px 3px 0;
+    z-index: 5; /* Ensure arrows are above images */
+}
+
+.nav-arrow.prev {
+    left: -40px;
+    border-radius: 3px 0 0 3px;
+}
+
+.nav-arrow.next {
+    right: -40px;
+    border-radius: 0 3px 3px 0;
+}
+
+.nav-arrow:hover {
+    color: rgba(0,0,0);
 }

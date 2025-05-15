@@ -4,6 +4,7 @@ library(scales)
 library(pROC)
 library(ggiraph)
 library(performance)
+library(grid)
 
 data_prs <- bind_rows(
   tibble(prs = rnorm(10000, 0, 1), group = 'control'),
@@ -66,18 +67,58 @@ theme_set(
 
 palette <- c("control" = "#C3C3C3", "case" = "#6746BB")
 
+create_angled_gradient <- function(colors, angle_deg) {
+
+  # Convert angle from degrees to radians
+  # Standard convention: 0 deg = right (+x), 90 deg = up (+y)
+  angle_rad <- angle_deg * pi / 180
+
+  # Calculate the components of the direction vector (unit vector)
+  dx <- cos(angle_rad)
+  dy <- sin(angle_rad)
+
+  # Calculate start and end points centered around (0.5, 0.5) NPC
+  # The vector goes from (0.5 - 0.5*direction) to (0.5 + 0.5*direction)
+  # This ensures the gradient line defined by the start/end points passes
+  # through the center of the NPC space (0.5, 0.5) with the correct angle.
+  # Scaling by 0.5 ensures the endpoints are typically within or near the
+  # 0-1 range for common angles, effectively defining the gradient across the space.
+  x1 <- 0.5 - 0.5 * dx
+  y1 <- 0.5 - 0.5 * dy
+  x2 <- 0.5 + 0.5 * dx
+  y2 <- 0.5 + 0.5 * dy
+
+  # Create the linear gradient object using NPC units
+  linearGradient(
+    colours = colors,
+    x1 = unit(x1, "npc"),
+    y1 = unit(y1, "npc"),
+    x2 = unit(x2, "npc"),
+    y2 = unit(y2, "npc")
+  )
+}
 
 plot_histogram <- function(data_prs) {
+
+  grad_control <- create_angled_gradient(c('white','#C3C3C3'), 90)
+  grad_case <- create_angled_gradient(c('white','#6746BB'), 90)
+
   quantile9 <- quantile(data_prs$z_prs, probs = 0.9)
   quantile1 <- quantile(data_prs$z_prs, probs = 0.1)
   data_prs |>
     ggplot(aes(x = z_prs)) +
-    geom_histogram(
-      aes(color = group, fill = group),
-      position = 'identity',
-      alpha = .5,
-      bins = 50
-    ) +
+    # geom_histogram(
+    #   aes(color = group, fill = group),
+    #   position = 'identity',
+    #   alpha = .5,
+    #   bins = 50
+    # ) +
+    geom_density(
+      data = subset(data_prs, group == 'control'),
+      aes(color = group, y = after_stat(count)), fill = grad_control, alpha = 0.55) +
+    geom_density(
+      data = subset(data_prs, group == 'case'),
+      aes(color = group, y = after_stat(count)), fill = grad_case, alpha = 0.55) +
     annotate(
       geom = 'segment',
       x = quantile1,
@@ -117,7 +158,7 @@ plot_histogram <- function(data_prs) {
       fill = NA,
       label.color = NA
     ) +
-    scale_y_continuous(expand = c(00, 0, 0, 0), ) +
+    scale_y_continuous(expand = c(0, 0, 0.3, 0)) +
     scale_fill_manual(values = palette) +
     scale_color_manual(values = palette) +
     guides(
@@ -216,6 +257,8 @@ plot_roc <- function(data_prs) {
   # Warning in roc.default(response, predictor, auc = TRUE, ...) :
   # Deprecated use a matrix as predictor. Unexpected results may be produced, please pass a numeric vector.
 
+  grad_case <- create_angled_gradient(c('white','#6746BB'), 120)
+
   data_prs <- data_prs |> mutate(group = if_else(group == 'case', 1, 0))
 
   roc_obj <- roc(group ~ z_prs, data_prs)
@@ -223,7 +266,7 @@ plot_roc <- function(data_prs) {
 
   ggroc(roc_obj, color = palette['case']) +
     geom_ribbon(
-      fill = palette['case'],
+      fill = grad_case,
       aes(x = specificity, ymin = -Inf, ymax = sensitivity),
       alpha = .3
     ) +
@@ -334,7 +377,7 @@ plot_ors <- function(data_prs) {
     geom_point(aes(color = OR)) +
     scale_color_gradientn(colors = palette) +
     guides(color = 'none') +
-    labs(x = 'PRS Quintile', y = 'Log Odds Ratio (95%CI)') +
+    labs(x = 'PRS Quintile', y = 'Log10 Odds Ratio (95%CI)') +
     theme(
       axis.text.x = element_text(size = 10)
     )
@@ -439,9 +482,9 @@ table_ors <- function(data_prs) {
   final_summary <- 
     left_join(counts_table, or_results, by = "labels") |>
     filter(labels != '40-60%') |>
-    mutate(label_text = str_c(round(OR,2), '\n(',round(lower_ci,2),'-',round(upper_ci,2),')')) |>
+    mutate(label_text = str_c(round(OR,2), '<br><span style="color:rgb(134, 134, 134)">(',round(lower_ci,2),'-',round(upper_ci,2),')</span>')) |>
       select(-case, -control, -OR, -lower_ci, -upper_ci) |>
-    rename(Group = 'labels', "LOR (95%CI)" = 'label_text') |>
+    rename(Group = 'labels', "Log10 OR<br>(95%CI)" = 'label_text') |>
     arrange(desc(Group))
 }
 
