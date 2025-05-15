@@ -235,7 +235,7 @@ ui <- fluidPage(
   ),
   div(class = 'footer',
     HTML('<i class="fab fa-github"></i>'),
-    tags$a(href = "https://github.com/barreiro-r/prs-explorer", "barreiro-r")
+    tags$a(target="_blank", rel="noopener noreferrer", href = "https://github.com/barreiro-r/prs-explorer", "barreiro-r")
     ),
   tags$script(src = "script.js")
 ) # End of fluidPage
